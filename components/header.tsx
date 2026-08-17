@@ -19,7 +19,7 @@ export function Header() {
       <div className="mx-auto flex w-full max-w-content items-center justify-between px-6">
         <Link href="/" className="flex items-center gap-2 text-[15px] font-semibold tracking-tight text-ink">
           <Footprints size={20} strokeWidth={2.25} className="text-accent" />
-          런코스
+          Runcourse
         </Link>
         <nav className="flex items-center gap-8">
           {NAV_LINKS.map((link) => {

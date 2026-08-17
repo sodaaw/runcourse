@@ -1,7 +1,7 @@
 import Link from "next/link";
 import { Star } from "lucide-react";
 import { Course } from "@/lib/types";
-import { DIFFICULTY_LABEL, getSafetySummary } from "@/lib/format";
+import { DIFFICULTY_LABEL } from "@/lib/format";
 import { SaveButton } from "./save-button";
 
 export function CourseCard({ course }: { course: Course }) {
@@ -50,7 +50,7 @@ export function CourseCard({ course }: { course: Course }) {
         </p>
 
         <p className="mt-1.5 line-clamp-2 text-sm leading-relaxed text-mute">
-          {getSafetySummary(course)}
+          {course.description}
         </p>
       </div>
     </Link>

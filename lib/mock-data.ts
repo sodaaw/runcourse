@@ -5,7 +5,7 @@ function unsplash(id: string, w = 800, h = 600) {
   return `https://images.unsplash.com/photo-${id}?auto=format&fit=crop&w=${w}&h=${h}&q=70`;
 }
 
-export const HERO_IMAGE = unsplash("1502224562085-639556652f33", 1800, 1000);
+export const HERO_IMAGE = "/seoul.avif";
 
 function genElevation(km: number, base: number, variance: number, seed: number): ElevationPoint[] {
   const points: ElevationPoint[] = [];

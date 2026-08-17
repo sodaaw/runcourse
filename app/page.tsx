@@ -26,7 +26,7 @@ export default function Home() {
         {/* eslint-disable-next-line @next/next/no-img-element */}
         <img
           src={HERO_IMAGE}
-          alt="야간에 도로를 달리는 러너"
+          alt="노을 지는 서울 야경, 남산타워가 보이는 도심 스카이라인"
           className="absolute inset-0 h-full w-full object-cover"
         />
         <div className="absolute inset-0 bg-gradient-to-t from-black/75 via-black/25 to-black/5" />

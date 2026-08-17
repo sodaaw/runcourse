@@ -5,7 +5,7 @@ import { Header } from "@/components/header";
 import { MobileTabBar } from "@/components/mobile-tab-bar";
 
 export const metadata: Metadata = {
-  title: "런코스 — 초보 러너를 위한 안전한 코스 추천",
+  title: "Runcourse — 초보 러너를 위한 안전한 코스 추천",
   description:
     "거리, 지형, 안전 요소를 입력하면 검증된 러닝 코스를 즉시 추천받으세요.",
 };
