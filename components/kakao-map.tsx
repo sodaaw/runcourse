@@ -30,10 +30,13 @@ type KakaoMapProps = RouteMapProps | MarkersMapProps;
 
 type Status = "loading" | "ready" | "error";
 
-const AMENITY_GLYPH: Record<Amenity["type"], string> = {
-  toilet: "화",
-  "convenience-store": "편",
-  water: "물",
+const AMENITY_ICON_SVG: Record<Amenity["type"], string> = {
+  toilet:
+    '<path d="M7 12h13a1 1 0 0 1 1 1 5 5 0 0 1-5 5h-.598a.5.5 0 0 0-.424.765l1.544 2.47a.5.5 0 0 1-.424.765H5.402a.5.5 0 0 1-.424-.765L7 18"/><path d="M8 18a5 5 0 0 1-5-5V4a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v8"/>',
+  "convenience-store":
+    '<path d="M16 10a4 4 0 0 1-8 0"/><path d="M3.103 6.034h17.794"/><path d="M3.4 5.467a2 2 0 0 0-.4 1.2V20a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6.667a2 2 0 0 0-.4-1.2l-2-2.667A2 2 0 0 0 17 2H7a2 2 0 0 0-1.6.8z"/>',
+  water:
+    '<path d="M7 16.3c2.2 0 4-1.83 4-4.05 0-1.16-.57-2.26-1.71-3.19S7.29 6.75 7 5.3c-.29 1.45-1.14 2.84-2.29 3.76S3 11.1 3 12.25c0 2.22 1.8 4.05 4 4.05z"/><path d="M12.56 6.6A10.97 10.97 0 0 0 14 3.02c.5 2.5 2 4.9 4 6.5s3 3.5 3 5.5a6.98 6.98 0 0 1-11.91 4.97"/>',
 };
 
 function pinElement(
@@ -52,9 +55,9 @@ function pinElement(
   dot.style.width = "14px";
   dot.style.height = "14px";
   dot.style.borderRadius = "9999px";
-  dot.style.background = variant === "start" ? "#3D6B4C" : "#14171A";
+  dot.style.background = variant === "start" ? "#3D6B4C" : "#1C1F1B";
   dot.style.border = "2px solid #ffffff";
-  dot.style.boxShadow = "0 0 0 1px #E2E4E1";
+  dot.style.boxShadow = "0 0 0 1px #E4E2DA";
 
   const tag = document.createElement("div");
   tag.textContent = label;
@@ -62,9 +65,9 @@ function pinElement(
   tag.style.padding = "3px 8px";
   tag.style.fontSize = "12px";
   tag.style.fontWeight = "600";
-  tag.style.color = "#14171A";
+  tag.style.color = "#1C1F1B";
   tag.style.background = "#ffffff";
-  tag.style.border = "1px solid #E2E4E1";
+  tag.style.border = "1px solid #E4E2DA";
   tag.style.whiteSpace = "nowrap";
 
   el.appendChild(tag);
@@ -78,16 +81,14 @@ function amenityPinElement(amenity: Amenity) {
   el.style.display = "flex";
   el.style.alignItems = "center";
   el.style.justifyContent = "center";
-  el.style.width = "22px";
-  el.style.height = "22px";
+  el.style.width = "24px";
+  el.style.height = "24px";
   el.style.borderRadius = "9999px";
   el.style.background = "#ffffff";
-  el.style.border = "2px solid #767B76";
-  el.style.fontSize = "10px";
-  el.style.fontWeight = "700";
-  el.style.color = "#767B76";
+  el.style.border = "2px solid #6B6F68";
+  el.style.color = "#6B6F68";
   el.style.cursor = "default";
-  el.textContent = AMENITY_GLYPH[amenity.type];
+  el.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">${AMENITY_ICON_SVG[amenity.type]}</svg>`;
   return el;
 }
 
@@ -104,6 +105,7 @@ export function KakaoMap(props: KakaoMapProps) {
 
   useEffect(() => {
     let cancelled = false;
+    const container = containerRef.current;
 
     loadKakaoMaps()
       .then((kakaoSdk) => {
@@ -191,6 +193,13 @@ export function KakaoMap(props: KakaoMapProps) {
 
     return () => {
       cancelled = true;
+      // React Strict Mode double-invokes effects in dev; since map creation
+      // is async, without this a second map instance gets mounted into the
+      // same container, leaving orphaned overlays that the amenities toggle
+      // can no longer reach. Wiping the container resets it cleanly.
+      if (container) container.innerHTML = "";
+      mapRef.current = null;
+      amenityOverlaysRef.current = [];
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [mode, center.lat, center.lng]);
@@ -228,7 +237,7 @@ export function KakaoMap(props: KakaoMapProps) {
   }
 
   return (
-    <div className={`relative ${className ?? ""}`}>
+    <div className={`relative overflow-hidden ${className ?? ""}`}>
       {status === "loading" && (
         <div className="absolute inset-0 flex items-center justify-center bg-surface">
           <p className="text-sm text-mute">지도를 불러오는 중...</p>

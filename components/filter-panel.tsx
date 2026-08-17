@@ -11,15 +11,16 @@ function ChipGroup<T extends string>({
 }: {
   label: string;
   value: T;
-  options: { value: T; label: string }[];
+  options: { value: T; label: string; variant?: "default" | "night" }[];
   onChange: (v: T) => void;
 }) {
   return (
     <div>
-      <p className="text-sm font-bold text-ink">{label}</p>
+      <p className="text-sm font-semibold text-ink">{label}</p>
       <div className="mt-2.5 flex flex-wrap gap-2">
         {options.map((opt) => {
           const active = opt.value === value;
+          const isNight = opt.variant === "night";
           return (
             <button
               key={opt.value}
@@ -28,7 +29,9 @@ function ChipGroup<T extends string>({
               className={clsx(
                 "h-10 rounded-full border px-4 text-sm font-medium transition-colors",
                 active
-                  ? "border-accent bg-accent text-white"
+                  ? isNight
+                    ? "border-night bg-night text-white"
+                    : "border-accent bg-accent text-white"
                   : "border-line bg-canvas text-ink hover:border-ink"
               )}
             >
@@ -78,7 +81,7 @@ export function FilterPanel({
     <div className="flex flex-col gap-7">
       <div>
         <div className="flex items-baseline justify-between">
-          <p className="text-sm font-bold text-ink">최대 거리</p>
+          <p className="text-sm font-semibold text-ink">최대 거리</p>
           <p className="tabular-nums text-sm font-semibold text-accent">
             {filters.maxDistanceKm.toFixed(1)}km
           </p>
@@ -126,12 +129,12 @@ export function FilterPanel({
         options={[
           { value: "any", label: "전체" },
           { value: "day", label: "주간" },
-          { value: "night", label: "야간" },
+          { value: "night", label: "야간", variant: "night" },
         ]}
       />
 
       <div>
-        <p className="text-sm font-bold text-ink">안전 요소</p>
+        <p className="text-sm font-semibold text-ink">안전 요소</p>
         <div className="mt-2.5 flex flex-wrap gap-2">
           <ToggleChip
             label="가로등 밝음"

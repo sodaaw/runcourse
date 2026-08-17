@@ -3,8 +3,8 @@
 @config "../tailwind.config.ts";
 
 :root {
-  --background: #ffffff;
-  --foreground: #14171a;
+  --background: #fbfaf7;
+  --foreground: #1c1f1b;
 }
 
 @theme inline {

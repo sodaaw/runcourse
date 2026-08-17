@@ -1,6 +1,6 @@
 import Link from "next/link";
-import { ArrowRight, MapPin, Lightbulb, ShieldCheck } from "lucide-react";
-import { courses } from "@/lib/mock-data";
+import { ArrowRight, MapPin, Search } from "lucide-react";
+import { courses, HERO_IMAGE } from "@/lib/mock-data";
 import { CourseCard } from "@/components/course-card";
 
 const NEIGHBORHOODS = [
@@ -12,101 +12,94 @@ const NEIGHBORHOODS = [
   "송파구 방이동",
 ];
 
-const previewCourses = [...courses]
-  .sort((a, b) => b.recommendScore - a.recommendScore)
-  .slice(0, 3);
+const sortedByScore = [...courses].sort(
+  (a, b) => b.recommendScore - a.recommendScore
+);
+const featuredCourse = sortedByScore[0];
+const previewCourses = sortedByScore.slice(1, 4);
 
 export default function Home() {
   return (
     <div>
-      {/* Full-bleed asymmetric hero */}
-      <section className="relative overflow-hidden bg-ink text-white">
-        <div className="mx-auto grid max-w-content grid-cols-1 gap-10 px-6 py-16 sm:py-24 lg:grid-cols-[1.3fr_1fr] lg:items-center lg:py-32">
-          <div>
-            <p className="flex items-center gap-1.5 text-sm font-semibold text-white/70">
-              <ShieldCheck size={16} strokeWidth={2.25} />
-              초보 러너를 위한 안전 우선 코스 추천
-            </p>
-            <h1 className="mt-4 text-[40px] font-extrabold leading-[1.08] tracking-tight sm:text-6xl">
-              오늘 밤,
-              <br />
-              집 근처에서
-              <br />
-              <span className="text-accent-soft">안전하게</span> 뛰세요.
-            </h1>
-            <p className="mt-5 max-w-md text-base leading-relaxed text-white/70">
-              거리, 지형, 가로등과 인도 폭까지 — 원하는 조건만 고르면
-              검증된 러닝 코스를 바로 추천해드려요.
-            </p>
+      {/* Full-bleed photo hero */}
+      <section className="relative flex min-h-[560px] items-end overflow-hidden sm:min-h-[640px]">
+        {/* eslint-disable-next-line @next/next/no-img-element */}
+        <img
+          src={HERO_IMAGE}
+          alt="야간에 도로를 달리는 러너"
+          className="absolute inset-0 h-full w-full object-cover"
+        />
+        <div className="absolute inset-0 bg-gradient-to-t from-black/75 via-black/25 to-black/5" />
 
-            <form
-              action="/courses"
-              className="mt-8 flex flex-col gap-3 sm:flex-row sm:items-center"
-            >
-              <label className="flex h-14 flex-1 items-center gap-2.5 border border-white/20 bg-white/5 px-4 sm:max-w-xs">
-                <MapPin size={18} className="shrink-0 text-white/60" />
-                <select
-                  name="location"
-                  defaultValue={NEIGHBORHOODS[0]}
-                  className="w-full bg-transparent text-sm font-medium text-white outline-none [&>option]:text-ink"
-                >
-                  {NEIGHBORHOODS.map((n) => (
-                    <option key={n} value={n}>
-                      {n}
-                    </option>
-                  ))}
-                </select>
-              </label>
-              <button
-                type="submit"
-                className="flex h-14 items-center justify-center gap-2 bg-white px-6 text-sm font-bold text-ink transition-opacity hover:opacity-90"
+        <div className="relative mx-auto w-full max-w-content px-6 pb-12 pt-32 sm:pb-16">
+          <p className="text-sm font-medium text-white/80">
+            초보 러너를 위한 안전 우선 코스 추천
+          </p>
+          <h1 className="mt-3 max-w-lg text-[36px] font-semibold leading-[1.15] tracking-tight text-white sm:text-5xl">
+            오늘 밤, 집 근처에서 안전하게 뛰세요
+          </h1>
+          <p className="mt-4 max-w-md text-[15px] leading-relaxed text-white/80">
+            거리, 지형, 가로등과 인도 폭까지 — 원하는 조건만 고르면 검증된
+            러닝 코스를 바로 추천해드려요.
+          </p>
+
+          <form
+            action="/courses"
+            className="mt-7 flex max-w-xl flex-col gap-2 rounded-2xl bg-canvas p-2 shadow-lg sm:flex-row sm:items-center"
+          >
+            <label className="flex h-12 flex-1 items-center gap-2.5 rounded-xl px-3">
+              <MapPin size={18} className="shrink-0 text-mute" />
+              <select
+                name="location"
+                defaultValue={NEIGHBORHOODS[0]}
+                className="w-full bg-transparent text-sm font-medium text-ink outline-none"
               >
-                내 코스 찾기
-                <ArrowRight size={18} />
-              </button>
-            </form>
-          </div>
+                {NEIGHBORHOODS.map((n) => (
+                  <option key={n} value={n}>
+                    {n}
+                  </option>
+                ))}
+              </select>
+            </label>
+            <button
+              type="submit"
+              className="flex h-12 items-center justify-center gap-2 rounded-xl bg-accent px-6 text-sm font-semibold text-white transition-opacity hover:opacity-90"
+            >
+              <Search size={16} />
+              코스 찾기
+            </button>
+          </form>
+        </div>
+      </section>
 
-          <div className="hidden border border-white/15 bg-white/5 p-6 lg:block">
-            <p className="flex items-center gap-2 text-sm font-semibold text-safety">
-              <Lightbulb size={16} />
-              오늘의 야간 안전 코스
-            </p>
-            <p className="mt-3 text-2xl font-bold leading-snug">
-              반포 달빛무지개다리 코스
-            </p>
-            <p className="mt-1 text-sm text-white/60">가로등 밝음 · 인도 넓음 · 4.0km</p>
-            <div className="mt-6 flex items-end gap-6 tabular-nums">
-              <div>
-                <p className="text-3xl font-extrabold">96%</p>
-                <p className="text-xs text-white/50">추천 만족도</p>
-              </div>
-              <div>
-                <p className="text-3xl font-extrabold">27분</p>
-                <p className="text-xs text-white/50">예상 소요시간</p>
-              </div>
-            </div>
-          </div>
+      {/* Featured course */}
+      <section className="mx-auto max-w-content px-6 py-12 sm:py-16">
+        <h2 className="text-xl font-semibold text-ink">오늘의 추천 코스</h2>
+        <p className="mt-1 text-sm text-mute">
+          안전 정보와 만족도가 가장 높은 코스예요.
+        </p>
+        <div className="mt-5">
+          <CourseCard course={featuredCourse} />
         </div>
       </section>
 
       {/* Preview courses */}
-      <section className="mx-auto max-w-content px-6 py-14 sm:py-20">
+      <section className="mx-auto max-w-content border-t border-line px-6 py-12 sm:py-16">
         <div className="flex items-end justify-between">
           <div>
-            <h2 className="text-2xl font-extrabold text-ink">지금 인기있는 코스</h2>
+            <h2 className="text-xl font-semibold text-ink">지금 인기있는 코스</h2>
             <p className="mt-1 text-sm text-mute">이번 주 러너들이 가장 많이 저장한 코스예요.</p>
           </div>
           <Link
             href="/courses"
-            className="hidden items-center gap-1 text-sm font-semibold text-accent hover:underline sm:flex"
+            className="hidden items-center gap-1 text-sm font-medium text-accent hover:underline sm:flex"
           >
             전체보기
             <ArrowRight size={16} />
           </Link>
         </div>
 
-        <div className="mt-6 grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
+        <div className="mt-4">
           {previewCourses.map((course) => (
             <CourseCard key={course.id} course={course} />
           ))}
@@ -114,7 +107,7 @@ export default function Home() {
 
         <Link
           href="/courses"
-          className="mt-6 flex h-12 items-center justify-center gap-1 border border-line text-sm font-semibold text-ink sm:hidden"
+          className="mt-6 flex h-12 items-center justify-center gap-1 rounded-xl border border-line text-sm font-medium text-ink sm:hidden"
         >
           전체 코스 보기
           <ArrowRight size={16} />

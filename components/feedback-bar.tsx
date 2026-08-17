@@ -22,7 +22,7 @@ export function FeedbackBar({ courseId }: { courseId: string }) {
             onClick={() => setFeedback(courseId, current === "up" ? null : "up")}
             aria-pressed={current === "up"}
             className={clsx(
-              "flex h-11 items-center gap-1.5 border px-4 text-sm font-semibold transition-colors",
+              "flex h-11 items-center gap-1.5 rounded-lg border px-4 text-sm font-semibold transition-colors",
               current === "up"
                 ? "border-accent bg-accent-soft text-accent"
                 : "border-line text-ink hover:border-ink"
@@ -36,7 +36,7 @@ export function FeedbackBar({ courseId }: { courseId: string }) {
             onClick={() => setFeedback(courseId, current === "down" ? null : "down")}
             aria-pressed={current === "down"}
             className={clsx(
-              "flex h-11 items-center gap-1.5 border px-4 text-sm font-semibold transition-colors",
+              "flex h-11 items-center gap-1.5 rounded-lg border px-4 text-sm font-semibold transition-colors",
               current === "down"
                 ? "border-caution bg-caution/10 text-caution"
                 : "border-line text-ink hover:border-ink"

@@ -22,17 +22,17 @@ export function ElevationChart({ data }: { data: ElevationPoint[] }) {
               <stop offset="100%" stopColor="#3D6B4C" stopOpacity={0} />
             </linearGradient>
           </defs>
-          <CartesianGrid stroke="#E2E4E1" vertical={false} />
+          <CartesianGrid stroke="#E4E2DA" vertical={false} />
           <XAxis
             dataKey="distanceKm"
             tickFormatter={(v) => `${v}km`}
-            tick={{ fontSize: 11, fill: "#767B76" }}
-            axisLine={{ stroke: "#E2E4E1" }}
+            tick={{ fontSize: 11, fill: "#6B6F68" }}
+            axisLine={{ stroke: "#E4E2DA" }}
             tickLine={false}
           />
           <YAxis
             tickFormatter={(v) => `${v}m`}
-            tick={{ fontSize: 11, fill: "#767B76" }}
+            tick={{ fontSize: 11, fill: "#6B6F68" }}
             axisLine={false}
             tickLine={false}
             width={44}
@@ -41,9 +41,10 @@ export function ElevationChart({ data }: { data: ElevationPoint[] }) {
             formatter={(value) => [`${value}m`, "고도"]}
             labelFormatter={(label) => `${label}km 지점`}
             contentStyle={{
-              border: "1px solid #E2E4E1",
-              borderRadius: 0,
+              border: "1px solid #E4E2DA",
+              borderRadius: 8,
               fontSize: 13,
+              backgroundColor: "#FBFAF7",
             }}
           />
           <Area

@@ -33,7 +33,7 @@ export function FilterSheet({
       />
       <div className="absolute inset-x-0 bottom-0 max-h-[85vh] overflow-y-auto rounded-t-2xl bg-canvas p-6 pb-10">
         <div className="mb-5 flex items-center justify-between">
-          <h2 className="text-lg font-extrabold text-ink">필터</h2>
+          <h2 className="text-lg font-semibold text-ink">필터</h2>
           <button
             type="button"
             onClick={onClose}
@@ -47,7 +47,7 @@ export function FilterSheet({
         <button
           type="button"
           onClick={onClose}
-          className="mt-8 h-14 w-full bg-accent text-sm font-bold text-white"
+          className="mt-8 h-14 w-full rounded-xl bg-accent text-sm font-bold text-white"
         >
           결과 보기
         </button>

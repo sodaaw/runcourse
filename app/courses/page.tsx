@@ -72,7 +72,7 @@ export default function CoursesPage() {
   return (
     <div className="mx-auto max-w-content px-6 py-8">
       <div className="mb-6">
-        <h1 className="text-2xl font-extrabold text-ink">AI 추천 코스</h1>
+        <h1 className="text-2xl font-semibold text-ink">AI 추천 코스</h1>
         <p className="mt-1 text-sm text-mute">
           조건에 맞는 코스 {results.length}개를 찾았어요.
         </p>
@@ -84,7 +84,7 @@ export default function CoursesPage() {
           <button
             type="button"
             onClick={() => setSheetOpen(true)}
-            className="flex h-11 items-center gap-2 border border-line px-4 text-sm font-semibold text-ink"
+            className="flex h-11 items-center gap-2 rounded-lg border border-line px-4 text-sm font-semibold text-ink"
           >
             <SlidersHorizontal size={16} />
             필터
@@ -92,7 +92,7 @@ export default function CoursesPage() {
           <select
             value={sort}
             onChange={(e) => setSort(e.target.value as SortOption)}
-            className="h-11 flex-1 border border-line bg-canvas px-3 text-sm font-medium text-ink"
+            className="h-11 flex-1 rounded-lg border border-line bg-canvas px-3 text-sm font-medium text-ink"
           >
             {SORT_OPTIONS.map((opt) => (
               <option key={opt.value} value={opt.value}>
@@ -119,7 +119,7 @@ export default function CoursesPage() {
               <select
                 value={sort}
                 onChange={(e) => setSort(e.target.value as SortOption)}
-                className="h-10 border border-line bg-canvas px-3 text-sm font-medium text-ink"
+                className="h-10 rounded-lg border border-line bg-canvas px-3 text-sm font-medium text-ink"
               >
                 {SORT_OPTIONS.map((opt) => (
                   <option key={opt.value} value={opt.value}>
@@ -132,13 +132,13 @@ export default function CoursesPage() {
           </div>
 
           {results.length === 0 ? (
-            <div className="border border-line py-20 text-center">
+            <div className="rounded-xl border border-line py-20 text-center">
               <p className="text-sm font-medium text-mute">
                 조건에 맞는 코스가 없어요. 필터를 조정해보세요.
               </p>
             </div>
           ) : view === "list" ? (
-            <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
+            <div>
               {results.map((course) => (
                 <CourseCard key={course.id} course={course} />
               ))}
@@ -154,7 +154,7 @@ export default function CoursesPage() {
                   position: c.center,
                   label: `${c.name} · ${c.distanceKm}km`,
                 }))}
-                className="h-[420px] w-full border border-line sm:h-[560px]"
+                className="h-[420px] w-full rounded-xl border border-line sm:h-[560px]"
               />
               <p className="mt-2 text-xs text-mute">
                 마커를 클릭하면 코스 상세 페이지로 이동해요.
@@ -179,7 +179,7 @@ function ViewToggle({
   onChange: (v: View) => void;
 }) {
   return (
-    <div className="flex h-11 border border-line">
+    <div className="flex h-11 overflow-hidden rounded-lg border border-line">
       <button
         type="button"
         onClick={() => onChange("list")}

@@ -17,7 +17,7 @@ export function Header() {
   return (
     <header className="sticky top-0 z-40 hidden h-14 items-center border-b border-line bg-canvas/95 backdrop-blur sm:flex">
       <div className="mx-auto flex w-full max-w-content items-center justify-between px-6">
-        <Link href="/" className="flex items-center gap-2 text-[15px] font-bold tracking-tight text-ink">
+        <Link href="/" className="flex items-center gap-2 text-[15px] font-semibold tracking-tight text-ink">
           <Footprints size={20} strokeWidth={2.25} className="text-accent" />
           런코스
         </Link>

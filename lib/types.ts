@@ -39,6 +39,7 @@ export interface Course {
   sidewalkWidth: "wide" | "narrow";
   surface: string;
   description: string;
+  imageUrl: string;
   center: LatLng;
   route: LatLng[];
   elevation: ElevationPoint[];
