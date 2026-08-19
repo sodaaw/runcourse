@@ -3,6 +3,7 @@
 import { ThumbsUp, ThumbsDown } from "lucide-react";
 import clsx from "clsx";
 import { useAppState } from "@/lib/app-state";
+import { trackEvent } from "@/lib/gtag";
 import { SaveButton } from "./save-button";
 
 export function FeedbackBar({ courseId }: { courseId: string }) {
@@ -19,7 +20,14 @@ export function FeedbackBar({ courseId }: { courseId: string }) {
         <div className="flex items-center gap-2">
           <button
             type="button"
-            onClick={() => setFeedback(courseId, current === "up" ? null : "up")}
+            onClick={() => {
+              const next = current === "up" ? null : "up";
+              setFeedback(courseId, next);
+              trackEvent("course_feedback", {
+                course_id: courseId,
+                value: next ?? "cleared",
+              });
+            }}
             aria-pressed={current === "up"}
             className={clsx(
               "flex h-11 items-center gap-1.5 rounded-lg border px-4 text-sm font-semibold transition-colors",
@@ -33,7 +41,14 @@ export function FeedbackBar({ courseId }: { courseId: string }) {
           </button>
           <button
             type="button"
-            onClick={() => setFeedback(courseId, current === "down" ? null : "down")}
+            onClick={() => {
+              const next = current === "down" ? null : "down";
+              setFeedback(courseId, next);
+              trackEvent("course_feedback", {
+                course_id: courseId,
+                value: next ?? "cleared",
+              });
+            }}
             aria-pressed={current === "down"}
             className={clsx(
               "flex h-11 items-center gap-1.5 rounded-lg border px-4 text-sm font-semibold transition-colors",

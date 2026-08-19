@@ -10,6 +10,7 @@ import {
   KakaoLoadErrorReason,
 } from "@/lib/kakao-maps-loader";
 import { Amenity, LatLng } from "@/lib/types";
+import { trackEvent } from "@/lib/gtag";
 
 interface RouteMapProps {
   mode: "route";
@@ -169,9 +170,13 @@ export function KakaoMap(props: KakaoMapProps) {
             bounds.extend(position);
             new kakaoSdk.maps.CustomOverlay({
               position,
-              content: pinElement(m.label, "default", () =>
-                router.push(`/courses/${m.id}`)
-              ),
+              content: pinElement(m.label, "default", () => {
+                trackEvent("select_course", {
+                  course_id: m.id,
+                  source: "map_marker",
+                });
+                router.push(`/courses/${m.id}`);
+              }),
               map,
               xAnchor: 0.5,
               yAnchor: 1,
@@ -246,7 +251,12 @@ export function KakaoMap(props: KakaoMapProps) {
       {status === "ready" && hasAmenityLayer && (
         <button
           type="button"
-          onClick={() => setShowAmenities((v) => !v)}
+          onClick={() => {
+            setShowAmenities((v) => {
+              trackEvent("toggle_amenities_layer", { value: !v });
+              return !v;
+            });
+          }}
           aria-pressed={showAmenities}
           className={clsx(
             "absolute right-3 top-3 z-10 flex h-9 items-center gap-1.5 border px-3 text-xs font-semibold shadow-sm",

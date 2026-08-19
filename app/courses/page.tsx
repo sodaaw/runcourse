@@ -9,6 +9,7 @@ import { FilterPanel } from "@/components/filter-panel";
 import { FilterSheet } from "@/components/filter-sheet";
 import { CourseCard } from "@/components/course-card";
 import { KakaoMap } from "@/components/kakao-map";
+import { trackEvent } from "@/lib/gtag";
 
 const SEOUL_CENTER = { lat: 37.5665, lng: 126.978 };
 
@@ -83,7 +84,10 @@ export default function CoursesPage() {
         <div className="flex items-center gap-3">
           <button
             type="button"
-            onClick={() => setSheetOpen(true)}
+            onClick={() => {
+              setSheetOpen(true);
+              trackEvent("filter_sheet_open", { source: "mobile" });
+            }}
             className="flex h-11 items-center gap-2 rounded-lg border border-line px-4 text-sm font-semibold text-ink"
           >
             <SlidersHorizontal size={16} />
@@ -91,7 +95,11 @@ export default function CoursesPage() {
           </button>
           <select
             value={sort}
-            onChange={(e) => setSort(e.target.value as SortOption)}
+            onChange={(e) => {
+              const value = e.target.value as SortOption;
+              setSort(value);
+              trackEvent("sort_change", { value, source: "mobile" });
+            }}
             className="h-11 flex-1 rounded-lg border border-line bg-canvas px-3 text-sm font-medium text-ink"
           >
             {SORT_OPTIONS.map((opt) => (
@@ -118,7 +126,11 @@ export default function CoursesPage() {
               정렬
               <select
                 value={sort}
-                onChange={(e) => setSort(e.target.value as SortOption)}
+                onChange={(e) => {
+                  const value = e.target.value as SortOption;
+                  setSort(value);
+                  trackEvent("sort_change", { value, source: "desktop" });
+                }}
                 className="h-10 rounded-lg border border-line bg-canvas px-3 text-sm font-medium text-ink"
               >
                 {SORT_OPTIONS.map((opt) => (
@@ -182,7 +194,10 @@ function ViewToggle({
     <div className="flex h-11 overflow-hidden rounded-lg border border-line">
       <button
         type="button"
-        onClick={() => onChange("list")}
+        onClick={() => {
+          onChange("list");
+          trackEvent("view_toggle", { value: "list" });
+        }}
         aria-pressed={view === "list"}
         className={clsx(
           "flex h-full items-center gap-1.5 px-3 text-sm font-medium transition-colors",
@@ -194,7 +209,10 @@ function ViewToggle({
       </button>
       <button
         type="button"
-        onClick={() => onChange("map")}
+        onClick={() => {
+          onChange("map");
+          trackEvent("view_toggle", { value: "map" });
+        }}
         aria-pressed={view === "map"}
         className={clsx(
           "flex h-full items-center gap-1.5 border-l border-line px-3 text-sm font-medium transition-colors",

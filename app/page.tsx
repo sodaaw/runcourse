@@ -1,7 +1,8 @@
-import Link from "next/link";
-import { ArrowRight, MapPin, Search } from "lucide-react";
+import { ArrowRight } from "lucide-react";
 import { courses, HERO_IMAGE } from "@/lib/mock-data";
 import { CourseCard } from "@/components/course-card";
+import { HeroSearchForm } from "@/components/hero-search-form";
+import { TrackedLink } from "@/components/tracked-link";
 
 const NEIGHBORHOODS = [
   "영등포구 여의도동",
@@ -43,32 +44,7 @@ export default function Home() {
             러닝 코스를 바로 추천해드려요.
           </p>
 
-          <form
-            action="/courses"
-            className="mt-7 flex max-w-xl flex-col gap-2 rounded-2xl bg-canvas p-2 shadow-lg sm:flex-row sm:items-center"
-          >
-            <label className="flex h-12 flex-1 items-center gap-2.5 rounded-xl px-3">
-              <MapPin size={18} className="shrink-0 text-mute" />
-              <select
-                name="location"
-                defaultValue={NEIGHBORHOODS[0]}
-                className="w-full bg-transparent text-sm font-medium text-ink outline-none"
-              >
-                {NEIGHBORHOODS.map((n) => (
-                  <option key={n} value={n}>
-                    {n}
-                  </option>
-                ))}
-              </select>
-            </label>
-            <button
-              type="submit"
-              className="flex h-12 items-center justify-center gap-2 rounded-xl bg-accent px-6 text-sm font-semibold text-white transition-opacity hover:opacity-90"
-            >
-              <Search size={16} />
-              코스 찾기
-            </button>
-          </form>
+          <HeroSearchForm neighborhoods={NEIGHBORHOODS} />
         </div>
       </section>
 
@@ -90,13 +66,15 @@ export default function Home() {
             <h2 className="text-xl font-semibold text-ink">지금 인기있는 코스</h2>
             <p className="mt-1 text-sm text-mute">이번 주 러너들이 가장 많이 저장한 코스예요.</p>
           </div>
-          <Link
+          <TrackedLink
             href="/courses"
+            event="nav_click"
+            params={{ destination: "/courses", source: "home_view_all_desktop" }}
             className="hidden items-center gap-1 text-sm font-medium text-accent hover:underline sm:flex"
           >
             전체보기
             <ArrowRight size={16} />
-          </Link>
+          </TrackedLink>
         </div>
 
         <div className="mt-4">
@@ -105,13 +83,15 @@ export default function Home() {
           ))}
         </div>
 
-        <Link
+        <TrackedLink
           href="/courses"
+          event="nav_click"
+          params={{ destination: "/courses", source: "home_view_all_mobile" }}
           className="mt-6 flex h-12 items-center justify-center gap-1 rounded-xl border border-line text-sm font-medium text-ink sm:hidden"
         >
           전체 코스 보기
           <ArrowRight size={16} />
-        </Link>
+        </TrackedLink>
       </section>
     </div>
   );

@@ -2,6 +2,7 @@
 
 import { X } from "lucide-react";
 import { ReactNode, useEffect } from "react";
+import { trackEvent } from "@/lib/gtag";
 
 export function FilterSheet({
   open,
@@ -28,7 +29,10 @@ export function FilterSheet({
       <button
         type="button"
         aria-label="필터 닫기"
-        onClick={onClose}
+        onClick={() => {
+          trackEvent("filter_sheet_close", { method: "backdrop" });
+          onClose();
+        }}
         className="absolute inset-0 bg-ink/40"
       />
       <div className="absolute inset-x-0 bottom-0 max-h-[85vh] overflow-y-auto rounded-t-2xl bg-canvas p-6 pb-10">
@@ -36,7 +40,10 @@ export function FilterSheet({
           <h2 className="text-lg font-semibold text-ink">필터</h2>
           <button
             type="button"
-            onClick={onClose}
+            onClick={() => {
+              trackEvent("filter_sheet_close", { method: "x_button" });
+              onClose();
+            }}
             aria-label="닫기"
             className="flex h-11 w-11 items-center justify-center rounded-full text-ink"
           >
@@ -46,7 +53,10 @@ export function FilterSheet({
         {children}
         <button
           type="button"
-          onClick={onClose}
+          onClick={() => {
+            trackEvent("filter_apply", { method: "sheet" });
+            onClose();
+          }}
           className="mt-8 h-14 w-full rounded-xl bg-accent text-sm font-bold text-white"
         >
           결과 보기

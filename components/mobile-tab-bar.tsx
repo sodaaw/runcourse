@@ -4,6 +4,7 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { Home, ListFilter, Bookmark } from "lucide-react";
 import clsx from "clsx";
+import { trackEvent } from "@/lib/gtag";
 
 const TABS = [
   { href: "/", label: "홈", icon: Home },
@@ -22,6 +23,9 @@ export function MobileTabBar() {
           <Link
             key={href}
             href={href}
+            onClick={() =>
+              trackEvent("nav_click", { destination: href, source: "mobile_tab_bar" })
+            }
             className="flex flex-1 flex-col items-center justify-center gap-1"
           >
             <Icon

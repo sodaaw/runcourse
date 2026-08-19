@@ -1,7 +1,10 @@
+"use client";
+
 import Link from "next/link";
 import { Star } from "lucide-react";
 import { Course } from "@/lib/types";
 import { DIFFICULTY_LABEL } from "@/lib/format";
+import { trackEvent } from "@/lib/gtag";
 import { SaveButton } from "./save-button";
 
 export function CourseCard({ course }: { course: Course }) {
@@ -10,6 +13,12 @@ export function CourseCard({ course }: { course: Course }) {
   return (
     <Link
       href={`/courses/${course.id}`}
+      onClick={() =>
+        trackEvent("select_course", {
+          course_id: course.id,
+          course_name: course.name,
+        })
+      }
       className="group flex gap-4 border-b border-line py-5 first:pt-0 last:border-b-0"
     >
       <div className="h-16 w-16 shrink-0 overflow-hidden rounded-lg bg-canvas-alt">

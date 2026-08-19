@@ -4,6 +4,7 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { Footprints } from "lucide-react";
 import clsx from "clsx";
+import { trackEvent } from "@/lib/gtag";
 
 const NAV_LINKS = [
   { href: "/", label: "홈" },
@@ -29,6 +30,9 @@ export function Header() {
               <Link
                 key={link.href}
                 href={link.href}
+                onClick={() =>
+                  trackEvent("nav_click", { destination: link.href, source: "header" })
+                }
                 className={clsx(
                   "relative py-4 text-sm font-medium transition-colors",
                   active ? "text-ink" : "text-mute hover:text-ink"

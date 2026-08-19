@@ -2,14 +2,17 @@
 
 import clsx from "clsx";
 import { FilterState } from "@/lib/types";
+import { trackEvent } from "@/lib/gtag";
 
 function ChipGroup<T extends string>({
   label,
+  filterKey,
   value,
   options,
   onChange,
 }: {
   label: string;
+  filterKey: string;
   value: T;
   options: { value: T; label: string; variant?: "default" | "night" }[];
   onChange: (v: T) => void;
@@ -25,7 +28,13 @@ function ChipGroup<T extends string>({
             <button
               key={opt.value}
               type="button"
-              onClick={() => onChange(opt.value)}
+              onClick={() => {
+                onChange(opt.value);
+                trackEvent("filter_change", {
+                  filter: filterKey,
+                  value: opt.value,
+                });
+              }}
               className={clsx(
                 "h-10 rounded-full border px-4 text-sm font-medium transition-colors",
                 active
@@ -46,17 +55,25 @@ function ChipGroup<T extends string>({
 
 function ToggleChip({
   label,
+  filterKey,
   active,
   onChange,
 }: {
   label: string;
+  filterKey: string;
   active: boolean;
   onChange: (v: boolean) => void;
 }) {
   return (
     <button
       type="button"
-      onClick={() => onChange(!active)}
+      onClick={() => {
+        onChange(!active);
+        trackEvent("filter_change", {
+          filter: filterKey,
+          value: !active,
+        });
+      }}
       aria-pressed={active}
       className={clsx(
         "h-11 min-w-[44px] rounded-full border px-4 text-sm font-medium transition-colors",
@@ -95,12 +112,25 @@ export function FilterPanel({
           onChange={(e) =>
             onChange({ ...filters, maxDistanceKm: Number(e.target.value) })
           }
+          onMouseUp={(e) =>
+            trackEvent("filter_change", {
+              filter: "max_distance_km",
+              value: Number((e.target as HTMLInputElement).value),
+            })
+          }
+          onTouchEnd={(e) =>
+            trackEvent("filter_change", {
+              filter: "max_distance_km",
+              value: Number((e.target as HTMLInputElement).value),
+            })
+          }
           className="mt-3 h-11 w-full accent-[#3D6B4C]"
         />
       </div>
 
       <ChipGroup
         label="난이도"
+        filterKey="difficulty"
         value={filters.difficulty}
         onChange={(v) => onChange({ ...filters, difficulty: v })}
         options={[
@@ -113,6 +143,7 @@ export function FilterPanel({
 
       <ChipGroup
         label="지형"
+        filterKey="terrain"
         value={filters.terrain}
         onChange={(v) => onChange({ ...filters, terrain: v })}
         options={[
@@ -124,6 +155,7 @@ export function FilterPanel({
 
       <ChipGroup
         label="시간대"
+        filterKey="time_of_day"
         value={filters.timeOfDay}
         onChange={(v) => onChange({ ...filters, timeOfDay: v })}
         options={[
@@ -138,11 +170,13 @@ export function FilterPanel({
         <div className="mt-2.5 flex flex-wrap gap-2">
           <ToggleChip
             label="가로등 밝음"
+            filterKey="streetlight_bright"
             active={filters.streetlightBright}
             onChange={(v) => onChange({ ...filters, streetlightBright: v })}
           />
           <ToggleChip
             label="인도 폭 넓음"
+            filterKey="wide_sidewalk"
             active={filters.wideSidewalk}
             onChange={(v) => onChange({ ...filters, wideSidewalk: v })}
           />

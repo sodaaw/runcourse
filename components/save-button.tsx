@@ -3,6 +3,7 @@
 import { Bookmark } from "lucide-react";
 import clsx from "clsx";
 import { useAppState } from "@/lib/app-state";
+import { trackEvent } from "@/lib/gtag";
 
 export function SaveButton({
   courseId,
@@ -23,6 +24,9 @@ export function SaveButton({
         e.preventDefault();
         e.stopPropagation();
         toggleSaved(courseId);
+        trackEvent(saved ? "unsave_course" : "save_course", {
+          course_id: courseId,
+        });
       }}
       aria-pressed={saved}
       aria-label={saved ? "저장 취소" : "코스 저장"}
