@@ -163,6 +163,7 @@ export default function CoursesPage() {
                 center={mapCenter}
                 markers={results.map((c) => ({
                   id: c.id,
+                  name: c.name,
                   position: c.center,
                   label: `${c.name} · ${c.distanceKm}km`,
                 }))}

@@ -23,7 +23,7 @@ interface RouteMapProps {
 interface MarkersMapProps {
   mode: "markers";
   center: LatLng;
-  markers: { id: string; position: LatLng; label: string }[];
+  markers: { id: string; name: string; position: LatLng; label: string }[];
   className?: string;
 }
 
@@ -173,6 +173,7 @@ export function KakaoMap(props: KakaoMapProps) {
               content: pinElement(m.label, "default", () => {
                 trackEvent("select_course", {
                   course_id: m.id,
+                  course_name: m.name,
                   source: "map_marker",
                 });
                 router.push(`/courses/${m.id}`);

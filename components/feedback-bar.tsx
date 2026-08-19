@@ -6,7 +6,13 @@ import { useAppState } from "@/lib/app-state";
 import { trackEvent } from "@/lib/gtag";
 import { SaveButton } from "./save-button";
 
-export function FeedbackBar({ courseId }: { courseId: string }) {
+export function FeedbackBar({
+  courseId,
+  courseName,
+}: {
+  courseId: string;
+  courseName?: string;
+}) {
   const { feedback, setFeedback } = useAppState();
   const current = feedback[courseId] ?? null;
 
@@ -23,9 +29,9 @@ export function FeedbackBar({ courseId }: { courseId: string }) {
             onClick={() => {
               const next = current === "up" ? null : "up";
               setFeedback(courseId, next);
-              trackEvent("course_feedback", {
+              trackEvent(next === "up" ? "like_course" : "clear_feedback", {
                 course_id: courseId,
-                value: next ?? "cleared",
+                course_name: courseName,
               });
             }}
             aria-pressed={current === "up"}
@@ -44,9 +50,9 @@ export function FeedbackBar({ courseId }: { courseId: string }) {
             onClick={() => {
               const next = current === "down" ? null : "down";
               setFeedback(courseId, next);
-              trackEvent("course_feedback", {
+              trackEvent(next === "down" ? "dislike_course" : "clear_feedback", {
                 course_id: courseId,
-                value: next ?? "cleared",
+                course_name: courseName,
               });
             }}
             aria-pressed={current === "down"}
@@ -62,7 +68,7 @@ export function FeedbackBar({ courseId }: { courseId: string }) {
           </button>
         </div>
         <div className="ml-auto">
-          <SaveButton courseId={courseId} size="sm" />
+          <SaveButton courseId={courseId} courseName={courseName} size="sm" />
         </div>
       </div>
     </div>

@@ -38,7 +38,12 @@ export function CourseCard({ course }: { course: Course }) {
           <h3 className="mt-0.5 truncate text-[15px] font-semibold text-ink">
             {course.name}
           </h3>
-          <SaveButton courseId={course.id} size="sm" variant="ghost" />
+          <SaveButton
+            courseId={course.id}
+            courseName={course.name}
+            size="sm"
+            variant="ghost"
+          />
         </div>
 
         <p className="mt-0.5 flex flex-wrap items-center gap-x-1.5 text-xs text-mute">

@@ -140,7 +140,7 @@ export default async function CourseDetailPage({
         </ul>
       </section>
 
-      <FeedbackBar courseId={course.id} />
+      <FeedbackBar courseId={course.id} courseName={course.name} />
     </div>
   );
 }

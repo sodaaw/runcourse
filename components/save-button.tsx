@@ -7,10 +7,12 @@ import { trackEvent } from "@/lib/gtag";
 
 export function SaveButton({
   courseId,
+  courseName,
   size = "md",
   variant = "solid",
 }: {
   courseId: string;
+  courseName?: string;
   size?: "sm" | "md";
   variant?: "solid" | "ghost";
 }) {
@@ -26,6 +28,7 @@ export function SaveButton({
         toggleSaved(courseId);
         trackEvent(saved ? "unsave_course" : "save_course", {
           course_id: courseId,
+          course_name: courseName,
         });
       }}
       aria-pressed={saved}
