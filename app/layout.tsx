@@ -3,6 +3,7 @@ import "./globals.css";
 import { AppStateProvider } from "@/lib/app-state";
 import { Header } from "@/components/header";
 import { MobileTabBar } from "@/components/mobile-tab-bar";
+import { GoogleAnalytics } from "@/components/google-analytics";
 
 export const metadata: Metadata = {
   title: "Runcourse — 초보 러너를 위한 안전한 코스 추천",
@@ -14,6 +15,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
   return (
     <html lang="ko" className="h-full antialiased">
       <body className="min-h-full flex flex-col bg-canvas text-ink">
+        <GoogleAnalytics />
         <AppStateProvider>
           <Header />
           <main className="flex-1 pb-16 sm:pb-0">{children}</main>
