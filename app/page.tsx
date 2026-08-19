@@ -3,6 +3,7 @@ import { courses, HERO_IMAGE } from "@/lib/mock-data";
 import { CourseCard } from "@/components/course-card";
 import { HeroSearchForm } from "@/components/hero-search-form";
 import { TrackedLink } from "@/components/tracked-link";
+import { RecentlyViewedSection } from "@/components/recently-viewed-section";
 
 const NEIGHBORHOODS = [
   "영등포구 여의도동",
@@ -45,6 +46,16 @@ export default function Home() {
           </p>
 
           <HeroSearchForm neighborhoods={NEIGHBORHOODS} />
+
+          <TrackedLink
+            href="/courses"
+            event="nav_click"
+            params={{ destination: "/courses", source: "home_hero_cta" }}
+            className="mt-4 inline-flex h-11 items-center gap-1.5 rounded-xl border border-white/40 px-5 text-sm font-semibold text-white transition-colors hover:bg-white/10"
+          >
+            코스 둘러보기
+            <ArrowRight size={16} />
+          </TrackedLink>
         </div>
       </section>
 
@@ -58,6 +69,8 @@ export default function Home() {
           <CourseCard course={featuredCourse} />
         </div>
       </section>
+
+      <RecentlyViewedSection courses={courses} />
 
       {/* Preview courses */}
       <section className="mx-auto max-w-content border-t border-line px-6 py-12 sm:py-16">

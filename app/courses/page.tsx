@@ -26,6 +26,19 @@ const DEFAULT_FILTERS: FilterState = {
 
 const DIFFICULTY_ORDER = { easy: 0, moderate: 1, hard: 2 };
 
+const QUICK_TIME_OPTIONS: { value: FilterState["timeOfDay"]; label: string }[] = [
+  { value: "any", label: "전체" },
+  { value: "day", label: "주간" },
+  { value: "night", label: "야간" },
+];
+
+const QUICK_DIFFICULTY_OPTIONS: { value: FilterState["difficulty"]; label: string }[] = [
+  { value: "any", label: "전체" },
+  { value: "easy", label: "쉬움" },
+  { value: "moderate", label: "보통" },
+  { value: "hard", label: "어려움" },
+];
+
 const SORT_OPTIONS: { value: SortOption; label: string }[] = [
   { value: "recommended", label: "추천순" },
   { value: "distance", label: "거리순" },
@@ -62,6 +75,17 @@ export default function CoursesPage() {
     return sorted;
   }, [filters, sort]);
 
+  const activeFilterCount = useMemo(() => {
+    let count = 0;
+    if (filters.maxDistanceKm !== DEFAULT_FILTERS.maxDistanceKm) count++;
+    if (filters.difficulty !== "any") count++;
+    if (filters.terrain !== "any") count++;
+    if (filters.timeOfDay !== "any") count++;
+    if (filters.streetlightBright) count++;
+    if (filters.wideSidewalk) count++;
+    return count;
+  }, [filters]);
+
   const mapCenter = useMemo(() => {
     if (results.length === 0) return SEOUL_CENTER;
     return {
@@ -79,6 +103,61 @@ export default function CoursesPage() {
         </p>
       </div>
 
+      {/* Quick filters */}
+      <div className="mb-5 flex flex-wrap gap-2">
+        {QUICK_TIME_OPTIONS.map((opt) => {
+          const active = filters.timeOfDay === opt.value;
+          return (
+            <button
+              key={opt.value}
+              type="button"
+              onClick={() => {
+                setFilters((f) => ({ ...f, timeOfDay: opt.value }));
+                trackEvent("filter_change", {
+                  filter: "time_of_day",
+                  value: opt.value,
+                  source: "quick",
+                });
+              }}
+              className={clsx(
+                "h-9 rounded-full border px-3.5 text-sm font-medium transition-colors",
+                active
+                  ? "border-accent bg-accent text-white"
+                  : "border-line bg-canvas text-ink hover:border-ink"
+              )}
+            >
+              {opt.label === "전체" ? "시간대 전체" : opt.label}
+            </button>
+          );
+        })}
+        <span className="mx-1 self-center text-line">|</span>
+        {QUICK_DIFFICULTY_OPTIONS.map((opt) => {
+          const active = filters.difficulty === opt.value;
+          return (
+            <button
+              key={opt.value}
+              type="button"
+              onClick={() => {
+                setFilters((f) => ({ ...f, difficulty: opt.value }));
+                trackEvent("filter_change", {
+                  filter: "difficulty",
+                  value: opt.value,
+                  source: "quick",
+                });
+              }}
+              className={clsx(
+                "h-9 rounded-full border px-3.5 text-sm font-medium transition-colors",
+                active
+                  ? "border-accent bg-accent text-white"
+                  : "border-line bg-canvas text-ink hover:border-ink"
+              )}
+            >
+              {opt.label === "전체" ? "난이도 전체" : opt.label}
+            </button>
+          );
+        })}
+      </div>
+
       {/* Mobile filter bar */}
       <div className="mb-5 flex flex-col gap-3 sm:hidden">
         <div className="flex items-center gap-3">
@@ -88,10 +167,15 @@ export default function CoursesPage() {
               setSheetOpen(true);
               trackEvent("filter_sheet_open", { source: "mobile" });
             }}
-            className="flex h-11 items-center gap-2 rounded-lg border border-line px-4 text-sm font-semibold text-ink"
+            className="relative flex h-11 items-center gap-2 rounded-lg border border-line px-4 text-sm font-semibold text-ink"
           >
             <SlidersHorizontal size={16} />
             필터
+            {activeFilterCount > 0 && (
+              <span className="flex h-4 min-w-4 items-center justify-center rounded-full bg-accent px-1 text-[10px] font-bold text-white">
+                {activeFilterCount}
+              </span>
+            )}
           </button>
           <select
             value={sort}
@@ -116,6 +200,15 @@ export default function CoursesPage() {
         {/* Desktop sidebar */}
         <aside className="hidden sm:block">
           <div className="sticky top-20">
+            <div className="mb-4 flex items-center gap-2">
+              <SlidersHorizontal size={16} className="text-ink" />
+              <p className="text-sm font-semibold text-ink">상세 필터</p>
+              {activeFilterCount > 0 && (
+                <span className="flex h-4 min-w-4 items-center justify-center rounded-full bg-accent px-1 text-[10px] font-bold text-white">
+                  {activeFilterCount}
+                </span>
+              )}
+            </div>
             <FilterPanel filters={filters} onChange={setFilters} />
           </div>
         </aside>

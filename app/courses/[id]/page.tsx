@@ -6,6 +6,7 @@ import { ElevationChart } from "@/components/elevation-chart";
 import { SafetyTags } from "@/components/safety-tags";
 import { FeedbackBar } from "@/components/feedback-bar";
 import { KakaoMap } from "@/components/kakao-map";
+import { RecentlyViewedTracker } from "@/components/recently-viewed-tracker";
 
 export function generateStaticParams() {
   return courses.map((c) => ({ id: c.id }));
@@ -28,6 +29,7 @@ export default async function CourseDetailPage({
 
   return (
     <div className="mx-auto max-w-content px-6 py-8 pb-44 sm:pb-28">
+      <RecentlyViewedTracker courseId={course.id} />
       <p className="flex items-center gap-1 text-sm font-medium text-mute">
         <MapPin size={14} />
         {course.neighborhood}

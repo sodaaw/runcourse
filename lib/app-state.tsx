@@ -21,13 +21,16 @@ interface StoredState {
   savedIds: string[];
   feedback: Record<string, Feedback>;
   metrics: Metrics;
+  recentlyViewedIds: string[];
 }
 
 const STORAGE_KEY = "runcourse-app-state";
+const RECENTLY_VIEWED_LIMIT = 5;
 const EMPTY_STATE: StoredState = {
   savedIds: [],
   feedback: {},
   metrics: { saveClicks: 0, feedbackClicks: 0 },
+  recentlyViewedIds: [],
 };
 
 let state: StoredState = EMPTY_STATE;
@@ -46,6 +49,7 @@ function loadFromStorage(): StoredState {
         saveClicks: parsed.metrics?.saveClicks ?? 0,
         feedbackClicks: parsed.metrics?.feedbackClicks ?? 0,
       },
+      recentlyViewedIds: parsed.recentlyViewedIds ?? [],
     };
   } catch {
     return EMPTY_STATE;
@@ -101,6 +105,14 @@ function setFeedbackValue(id: string, value: Feedback) {
   });
 }
 
+function addRecentlyViewedId(id: string) {
+  const recentlyViewedIds = [
+    id,
+    ...state.recentlyViewedIds.filter((x) => x !== id),
+  ].slice(0, RECENTLY_VIEWED_LIMIT);
+  commit({ ...state, recentlyViewedIds });
+}
+
 interface AppState {
   savedIds: string[];
   toggleSaved: (id: string) => void;
@@ -108,6 +120,8 @@ interface AppState {
   feedback: Record<string, Feedback>;
   setFeedback: (id: string, value: Feedback) => void;
   metrics: Metrics;
+  recentlyViewedIds: string[];
+  addRecentlyViewed: (id: string) => void;
 }
 
 const AppStateContext = createContext<AppState | null>(null);
@@ -127,6 +141,8 @@ export function AppStateProvider({ children }: { children: ReactNode }) {
     feedback: snapshot.feedback,
     setFeedback: setFeedbackValue,
     metrics: snapshot.metrics,
+    recentlyViewedIds: snapshot.recentlyViewedIds,
+    addRecentlyViewed: addRecentlyViewedId,
   };
 
   return (

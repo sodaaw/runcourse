@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { Star } from "lucide-react";
+import { Star, Clock } from "lucide-react";
 import { Course } from "@/lib/types";
 import { DIFFICULTY_LABEL } from "@/lib/format";
 import { trackEvent } from "@/lib/gtag";
@@ -55,6 +55,11 @@ export function CourseCard({ course }: { course: Course }) {
           <span>{DIFFICULTY_LABEL[course.difficulty]}</span>
           <span>·</span>
           <span>{course.distanceKm}km</span>
+          <span>·</span>
+          <span className="inline-flex items-center gap-0.5">
+            <Clock size={11} />
+            {course.estimatedMinutes}분
+          </span>
           {isNight && (
             <>
               <span>·</span>
